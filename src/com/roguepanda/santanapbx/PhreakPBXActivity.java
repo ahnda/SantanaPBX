@@ -21,12 +21,12 @@ public class PhreakPBXActivity extends Activity {
 	private TextView viewProgressText;
 	private ProgressBar viewProgressBar;
 	
-	private final int PBXToneDuration = 150;
-	private final int PBXWaitDuration = 50;
+	private final int PBXToneDuration = 100;
+	private final int PBXWaitDuration = 100;
 	private ToneGenerator PBXOut;
 	
 	private volatile Thread phreakThread;
-	private Handler mHandler = new Handler();
+	private Handler phreakHandler = new Handler();
 	private volatile boolean exitRequested = false;
 
     @Override
@@ -60,7 +60,7 @@ public class PhreakPBXActivity extends Activity {
     	        	key++;
 
     	        	//Update progress
-    	        	mHandler.post(new Runnable() {
+    	        	phreakHandler.post(new Runnable() {
     	        		public void run() {
     	        			updateDigits();
     	        		}
@@ -86,14 +86,14 @@ public class PhreakPBXActivity extends Activity {
     @Override
     public void onBackPressed() {
     	exitRequested = true;
-    	mHandler.removeCallbacks(phreakThread);
+    	phreakHandler.removeCallbacks(phreakThread);
     	super.onBackPressed();
     }
     
     @Override
     public void onDestroy() {
     	exitRequested = true;
-    	mHandler.removeCallbacks(phreakThread);
+    	phreakHandler.removeCallbacks(phreakThread);
     	super.onDestroy();
     }
     
@@ -107,19 +107,19 @@ public class PhreakPBXActivity extends Activity {
 	    playPBXControl();
     }
     
-    public void playPBXTone(int a_digit) {
+    public void playPBXTone(int digit) {
     	try{
-	    	int tone = ToneGenerator.TONE_DTMF_0 + a_digit;
+	    	int tone = ToneGenerator.TONE_DTMF_0 + digit;
 	    	PBXOut.startTone(tone, PBXToneDuration);
 	    	Thread.sleep(PBXToneDuration);
-	    	PBXOut.stopTone();
+	    	PBXOut.stopTone();	//Probably not necessary
 	    	Thread.sleep(PBXWaitDuration);
     	} catch(InterruptedException e) {
     		onBackPressed();
     	}
     }
     
-    public void playPBXControl() {
+    public void playPBXControl() {	//Made longer to better distinguish tone
     	try{
     		int tone = ToneGenerator.TONE_DTMF_S;
     		PBXOut.startTone(tone, PBXToneDuration + PBXWaitDuration);
