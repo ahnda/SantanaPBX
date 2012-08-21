@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title">Get crackin\'</string>
+    <string name="selectId">Which secret key do you want to find?</string>
+    <string name="startButton">Start</string>
+    <string name="app_name">SantanaPBX</string>
+    <string name="phreak">Phreaking&#8230;</string>
+    <string name="progress">Testing combo\:</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_phreak_pbx">PhreakPBX</string>
+
+</resources>
