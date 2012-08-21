@@ -2,6 +2,7 @@ package com.roguepanda.santanapbx;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
@@ -70,6 +71,12 @@ public class PhreakPBXActivity extends Activity {
         phreakThread.start();
         
     }
+    
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+    	super.onConfigurationChanged(newConfig);
+    	setContentView(R.layout.activity_phreak_pbx);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,15 +90,21 @@ public class PhreakPBXActivity extends Activity {
     	super.onBackPressed();
     }
     
-    public boolean sendPBXCommand() {
+    @Override
+    public void onDestroy() {
+    	exitRequested = true;
+    	mHandler.removeCallbacks(phreakThread);
+    	super.onDestroy();
+    }
+    
+    public void sendPBXCommand() {
 	    playPBXTone(idDigits[1]);
 	    playPBXTone(idDigits[0]);
 	    playPBXTone(keyDigits[3]);
 	    playPBXTone(keyDigits[2]);
 	    playPBXTone(keyDigits[1]);
 	    playPBXTone(keyDigits[0]);
-	    playPBXTone(15);
-    	return true;
+	    playPBXControl();
     }
     
     public void playPBXTone(int a_digit) {
@@ -102,7 +115,18 @@ public class PhreakPBXActivity extends Activity {
 	    	PBXOut.stopTone();
 	    	Thread.sleep(PBXWaitDuration);
     	} catch(InterruptedException e) {
-    		exitRequested = true;
+    		onBackPressed();
+    	}
+    }
+    
+    public void playPBXControl() {
+    	try{
+    		int tone = ToneGenerator.TONE_DTMF_S;
+    		PBXOut.startTone(tone, PBXToneDuration + PBXWaitDuration);
+    		Thread.sleep(PBXToneDuration + PBXWaitDuration);
+    		PBXOut.stopTone();
+    	} catch(InterruptedException e) {
+    		onBackPressed();
     	}
     }
     

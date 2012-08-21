@@ -11,7 +11,8 @@
         android:label="@string/app_name" >
         <activity
             android:name=".SantanaPBXActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:configChanges="orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +21,8 @@
         </activity>
         <activity
             android:name=".PhreakPBXActivity"
-            android:label="@string/title_activity_phreak_pbx" >
+            android:label="@string/title_activity_phreak_pbx"
+            android:configChanges="orientation" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.roguepanda.santanapbx.SantanaPBXActivity" />
